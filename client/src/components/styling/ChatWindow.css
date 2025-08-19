@@ -1,0 +1,40 @@
+.chat-container {
+    background-color: black;
+    border-radius: 15px;
+    min-height: 500px;
+    min-width: 800px;
+    padding: 1.6rem;
+    display: flex;
+    flex-direction: column;
+    flex: auto;
+    gap: 6px;
+}
+
+.chat-header {
+    align-self: flex-start;
+}
+
+.chat-input-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+}
+
+.chat-input-container > input {
+    height: 1.5rem;
+    flex-grow: 2;
+}
+
+.submit-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.submit-icon {
+    fill: none;
+    stroke: #FEFEFE;
+    width: 1rem;
+}
