@@ -2,6 +2,7 @@ import express, { urlencoded } from 'express'
 import cors from 'cors'
 import multer from 'multer'
 import uploadRouter from './routes/uploadRouter.js'
+import vectorRouter from './routes/vectorRouter.js'
 
 const PORT = 8000
 const app = express()
@@ -13,6 +14,7 @@ app.use(urlencoded({ extended : true }))
 const upload = multer({ storage : multer.memoryStorage() })
 
 app.use('/upload', upload.single('file'), uploadRouter)
+app.use('/vector', vectorRouter)
 
 app.use((req, res) => {
     res.status(404).json({ error : "Path not found" })

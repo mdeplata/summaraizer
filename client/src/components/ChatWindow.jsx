@@ -4,11 +4,31 @@ import './styling/ChatWindow.css'
 
 export default function ChatWindow() {
     const [selectedFile, setSelectedFile] = useState(null);
+    const [chatDialogue, setChatDialogue] = useState([]);
 
-    const baseServerUrl = 'http://localhost:8000'
+    const baseServerUrl = 'https://orange-goldfish-w6wr465vgpv2vwp-8000.app.github.dev'
 
-    const submitUserChat = () => {
+    const submitUserChat = (formData) => {
+        const userInput = formData.get("user-input")
+        if (userInput) {
 
+            console.log(userInput)
+
+            setChatDialogue(prevChatDialogue => [...prevChatDialogue, userInput])
+
+            const userQuery = {
+                userQuery : userInput
+            }
+
+            axios.post(baseServerUrl + '/vector', userQuery)
+                .then(res => {
+                    console.log('Querying vector store...')
+                    setChatDialogue(prevChatDialogue => [...prevChatDialogue, res.data.aiResponse])
+                })
+                .catch(err => {
+                    console.log(`Error querying vector store : ${err}`)
+                })
+        }
     }
     
     const handleFileChange = (event) => {
@@ -20,9 +40,20 @@ export default function ChatWindow() {
         formData.append('file', selectedFile)
 
         axios.post(baseServerUrl + '/upload', formData)
-            .then(res => console.log(res.data))
+            .then(res => {
+                console.log(res.data)
+            })
             .catch(err => console.log(`Error uploading PDF file : ${err}`))
+            
+        setSelectedFile(null)
     }
+
+    const chatDialogueElements = chatDialogue.map((text, index) => {
+        const chatType = index % 2 == 0 ? 'human-chat' : 'ai-chat'
+        const classes = "chat-bubble " + chatType
+        
+        return <div key={index} className={classes}>{text}</div>
+    })
 
     return (
         <main>
@@ -31,8 +62,7 @@ export default function ChatWindow() {
                     <p>Summar<b>AI</b>zer: PDF Query Bot</p>
                 </div>
                 <div className="chat-conversation-container">
-                    <div className="chat-bubble human-chat">What is ...?</div>
-                    <div className="chat-bubble ai-chat">AI response...</div>
+                    { chatDialogueElements }
                 </div>
                 <div className="user-container">
                     <form action={submitUserChat} className="chat-input-container">
@@ -45,7 +75,7 @@ export default function ChatWindow() {
                     </form>
                     <div className="file-upload-container">
                         <input type="file" accept=".pdf" onChange={handleFileChange} />
-                        <button onClick = {handleUpload}>Upload PDF</button>
+                        <button onClick={handleUpload}>Upload PDF</button>
                     </div>
                 </div>
             </section>
