@@ -1,5 +1,8 @@
 import { createClient } from "@supabase/supabase-js"
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf"
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters"
+import { OpenAIEmbeddings } from "@langchain/openai"
+import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase"
 import { Blob } from 'formdata-node'
 import dotenv from "dotenv"
 
@@ -15,6 +18,22 @@ export const uploadFile = async (req, res) => {
     const loader = new PDFLoader(blob)
 
     const docs = await loader.load()
+    const splitter = new RecursiveCharacterTextSplitter({
+        chunkSize : 1000,
+        chunkOverlap : 200,
+    })
 
-    console.log(docs[0])
+    const chunks = await splitter.splitDocuments(docs)
+
+    const openaiAPIKey = process.env.OPENAI_API_KEY
+    const embeddings = new OpenAIEmbeddings({ openaiAPIKey })
+
+    await SupabaseVectorStore.fromDocuments(
+        chunks,
+        embeddings,
+        {
+            client : supabase,
+            tableName : 'documents'
+        }
+    )
 }
