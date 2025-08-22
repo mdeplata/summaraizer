@@ -6,7 +6,7 @@ export default function ChatWindow() {
     const [selectedFile, setSelectedFile] = useState(null);
     const [chatDialogue, setChatDialogue] = useState([]);
 
-    const baseServerUrl = 'https://pdf-bot-lake.vercel.app/'
+    const baseServerUrl = 'https://pdf-bot-lake.vercel.app'
 
     const divRef = useRef(null)
     const fileInputRef = useRef(null)
