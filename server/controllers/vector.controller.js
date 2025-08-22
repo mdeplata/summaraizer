@@ -8,13 +8,17 @@ import dotenv from "dotenv"
 
 dotenv.config()
 
+function combineDocuments(docs){
+    return docs.map((doc)=>doc.pageContent).join('\n\n')
+}
+
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY)
 const openaiAPIKey = process.env.OPENAI_API_KEY
 const llm = new ChatOpenAI({ openaiAPIKey})
 
 const embeddings = new OpenAIEmbeddings({ openaiAPIKey })
 const vectorStore = new SupabaseVectorStore(embeddings, {
-    supabase,
+    client : supabase,
     tableName : 'documents',
     queryName : 'match_documents'
 })
@@ -26,7 +30,7 @@ question: {question}
 standalone question:`
 const standaloneQuestionPrompt = PromptTemplate.fromTemplate(standaloneQuestionTemplate)
 
-const answerTemplate = `You are a helpful and enthusiastic support bot who can answer a given question about Scrimba based on the context provided and the conversation history. Try to find the answer in the context. If the answer is not given in the context, find the answer in the conversation history if possible. If you really don't know the answer, say "I'm sorry, I don't know the answer to that." And direct the questioner to email help@scrimba.com. Don't try to make up an answer. Always speak as if you were chatting to a friend.
+const answerTemplate = `You are a helpful and enthusiastic support bot who can answer a given question based on the context provided and the conversation history. Try to find the answer in the context. If the answer is not given in the context, find the answer in the conversation history if possible. If you really don't know the answer, say "I'm sorry, I don't know the answer to that." And direct the questioner to try another question. Don't try to make up an answer. Always speak as if you were chatting to a friend.
 context: {context}
 conversation history: {conv_history}
 question: {question}
@@ -59,8 +63,6 @@ const chain = RunnableSequence.from([
     answerChain
 ])
 
-const convHistory = []
-
 function formatConvHistory(messages) {
     return messages.map((message, i) => {
         if (i % 2 === 0){
@@ -75,7 +77,8 @@ function formatConvHistory(messages) {
 export const queryVectorStore = async (req, res) => {
     try {
 
-        const { userQuery } = req.body
+        const { userQuery, convHistory } = req.body
+        console.log(userQuery)
 
         const aiResponse = await chain.invoke({
             question : userQuery,
@@ -86,9 +89,10 @@ export const queryVectorStore = async (req, res) => {
         convHistory.push(aiResponse)
         
         
-        res.send(200).json({ aiResponse : aiResponse })
+        res.status(200).json({ aiResponse : aiResponse })
 
     } catch (err) {
-        res.send(500).json({ error : `Error getting AI Response : ${err}`})
+        console.log(err)
+        res.status(500).json({ error : `Error getting AI Response : ${err}`})
     }
 }
