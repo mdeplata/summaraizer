@@ -1,13 +1,14 @@
 <div align="center">
-    <h2> SummarAIzer: PDF Summary Chat Bot </h2>
 
-    ![](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+  <h2> SummarAIzer: PDF Summary Chat Bot </h2>
+
+![](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)  ![](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)  ![](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)  ![](https://img.shields.io/badge/LangChain-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white)  ![](https://img.shields.io/badge/Supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white)
+
 </div>
-
 
 ## ✨ Description:
 
-**SummarAIzer** is an AI-Powered PDF Knowledge Assistant that answers questions you have about uploaded PDF files. Built using **LangChain.js, React, Express.js, and SupaBase** to allow users to upload PDF files, which are then turned into SupaBase Vector Stores using LangChain.js that can then be used for user question lookup.
+**SummarAIzer** is an AI-Powered PDF Knowledge Assistant that answers questions you have about uploaded PDF files. Built using **LangChain.js, React, Express.js, and SupaBase** to allow users to upload PDF files, which are then turned into SupaBase Vector Stores with LangChain.js, that can then be used for user question lookup.
 
 ## ⚙️ Features:
 
