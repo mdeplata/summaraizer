@@ -1,26 +1,78 @@
 main {
-    width: 70%;
-}
-
-.chat-container {
-    background-color: #0f0f0f;
-    border-radius: 15px;
-    padding: 1.6rem;
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
 }
 
-.chat-header {
-    align-self: flex-start;
+.upload-box {
+    padding: 3rem;
+    border: 2px dashed black;
+    border-radius: 1rem;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+.upload-bubble {
+    background-image: linear-gradient(to bottom right, black, silver);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.upload-icon {
+    width: 2rem;
+    height: 2rem;
+    color: white;
+}
+
+.upload-text {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.upload-input {
+    display: none;
+}
+
+.chat-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.file-info-banner {
+    padding: 1rem 2rem;
+    background-image: linear-gradient(to right, black, silver);
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+
+.close-button {
+    margin-left: auto;
+    background: none;
+    border: none;
+}
+
+.file-close {
+    color: black;
 }
 
 .chat-conversation-container {
     height: 100%;
     overflow-y: scroll;
-    margin: 1em, 0;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     gap: 1em;
@@ -39,49 +91,57 @@ main {
     max-width: 500px;
     min-width: 60%;
     border-radius: 10px;
-    color: #fefefe;
+}
+
+.italic {
+    font-style: italic;
 }
 
 .human-chat {
     border-bottom-right-radius: 0;
     align-self: flex-end;
-    background-color: #363636;
+    background-color: silver;
+    color: black;
 }
 
 .ai-chat {
     border-bottom-left-radius: 0;
     align-self: flex-start;
-    background-color: #334959;
-}
-
-.user-container {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6em;
+    background-color: black;
+    color: white;
 }
 
 .chat-input-container {
+    background-color: white;
+    padding: 1.5rem 3rem;
     display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 6px;
+    gap: 0.5em;
+    border-top: 1px;
+    border-style: solid;
+    border-color: rgb(229, 229, 229)
 }
 
 .chat-input-container > input {
-    height: 1.5rem;
-    flex-grow: 2;
+    height: 3rem;
+    padding: 0.5rem 1rem;
+    flex: 1;
+    border-radius: 0.7rem;
+    background-color: white;
+    color: black;
+    border-color: rgb(229, 229, 229);
+    border-style: solid;
+    border-width: 1px;
 }
 
 .submit-button {
-    padding: 5px 15px;
+    padding: 0.5rem 1.7rem;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.submit-icon {
-    fill: none;
-    stroke: #FEFEFE;
-    width: 1rem;
+    gap: 6px;
+    border-radius: 0.7rem;
+    border: none;
+    background-image: linear-gradient(to right, black, silver);
+    font-size: 1rem;
+    font-weight: bold;
 }

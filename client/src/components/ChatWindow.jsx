@@ -1,6 +1,7 @@
-import { useState, useRef, useLayoutEffect } from 'react'
-import axios from 'axios'
-import './styling/ChatWindow.css'
+import { useState, useRef, useLayoutEffect } from 'react';
+import { Upload, FileText, X, Send } from 'lucide-react';
+import axios from 'axios';
+import './styling/ChatWindow.css';
 
 export default function ChatWindow() {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -41,58 +42,82 @@ export default function ChatWindow() {
                 })
         }
     }
-    
-    const handleFileChange = (event) => {
-        setSelectedFile(event.target.files[0])
-    }
 
-    const handleUpload = () => {
-        const formData = new FormData()
-        formData.append('file', selectedFile)
-
-        axios.post(baseServerUrl + '/upload', formData)
+    const handleUpload = (event) => {
+        const file = event.target.files[0];
+        if (file && file.type === 'application/pdf') {
+            console.log("uploading file")
+            const formData = new FormData()
+            formData.append('file', file)
+            
+            axios.post(baseServerUrl + '/upload', formData)
             .then(res => {
                 console.log(res.data)
             })
             .catch(err => console.log(`Error uploading PDF file : ${err}`))
-            
-        setSelectedFile(null)
+            setSelectedFile(file)
+            setChatDialogue([`PDF file uploaded. You can now ask questions about this document.`])
+        }
+    }
+
+    const handleRemoveFile = () => {
+        setSelectedFile(null);
+        setChatDialogue([]);
         if (fileInputRef.current) {
             fileInputRef.current.value = ''
         }
     }
 
     const chatDialogueElements = chatDialogue.map((text, index) => {
-        const chatType = index % 2 == 0 ? 'human-chat' : 'ai-chat'
-        const classes = "chat-bubble " + chatType
+        const chatType = index % 2 == 0 ? 'ai-chat' : 'human-chat'
+        const classes = "chat-bubble " + chatType + (index == 0 ? ' italic' : '');
         
         return <div key={index} className={classes}>{text}</div>
     })
 
     return (
         <main>
-            <section className="chat-container">
-                <div className="chat-header">
-                    <p>Summar<b>AI</b>zer: PDF Query Bot</p>
-                </div>
-                <div className="chat-conversation-container" ref={divRef}>
-                    { chatDialogueElements }
-                </div>
-                <div className="user-container">
+            {!selectedFile ? (
+                <section>
+                    <div
+                        onClick={() => fileInputRef.current?.click()}
+                        className="upload-box"
+                    >
+                        <div className="upload-bubble">
+                            <Upload className="upload-icon" />
+                        </div>
+                        <h3 className="upload-text">Upload your PDF</h3>
+                        <p>Click to browse or drag and drop your PDF document here.</p>
+                    </div>
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept=".pdf"
+                        onChange={handleUpload}
+                        className="upload-input"
+                    />
+                </section>
+            ) : (
+                <section className="chat-container">
+                    <div className="file-info-banner">
+                        <FileText className="file-icon" />
+                        <span className="file-name">{selectedFile.name}</span>
+                        <button onClick={handleRemoveFile} className="close-button">
+                            <X className="file-close" />
+                        </button>
+                    </div>
+                    <div className="chat-conversation-container" ref={divRef}>
+                        { chatDialogueElements }
+                    </div>
                     <form action={submitUserChat} className="chat-input-container">
                         <input name="user-input" type="text" id="user-input" required />
                         <button id="submit" className="submit-button">
-                            <svg viewBox="0 0 27 33" className="submit-icon">
-                                <path d="M4.53248 16.0788L2.0004 30.7978L24.7891 16.0788L2.00041 1.35974L4.53248 16.0788ZM4.53248 16.0788L14.6608 16.0788" strokeWidth="2.53207" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
+                            <Send className="submit-icon" />
+                            Send
                         </button>
                     </form>
-                    <div className="file-upload-container">
-                        <input type="file" accept=".pdf" onChange={handleFileChange} ref={fileInputRef}/>
-                        <button onClick={handleUpload}>Upload PDF</button>
-                    </div>
-                </div>
-            </section>
+                </section>
+            )}
         </main>
     )
 }
