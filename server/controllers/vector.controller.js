@@ -65,7 +65,7 @@ const chain = RunnableSequence.from([
 
 function formatConvHistory(messages) {
     return messages.map((message, i) => {
-        if (i % 2 === 0){
+        if (i % 2 === 1){
             return `Human: ${message}`
         } else {
             return `AI: ${message}`
